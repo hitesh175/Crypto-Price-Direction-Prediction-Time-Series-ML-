@@ -1,117 +1,38 @@
+# Crypto Price Direction Prediction
 
----
+A course project comparing machine-learning models for the next 15-minute price direction across BTC, ETH, SOL, XRP, and DOGE market data.
 
-# 📈 Crypto Price Direction Prediction — Time-Series Machine Learning
+## Workflow
 
-This project builds a **time-series machine learning model** to predict short-term cryptocurrency price direction using high-frequency market data.
+The [main notebook](ML_Final_Project_Hitesh.ipynb) combines five Bybit CSV files, explores the data, creates return/volume/candle features, adds lag and rolling statistics, and compares classification approaches.
 
-The objective is to classify whether the next 15-minute price movement will be **up or down**, based on historical price patterns and engineered technical features.
+The target is 1 when the next close exceeds the current close, otherwise 0. Models include thresholded linear regression, logistic regression, KNN, decision trees, and Random Forest.
 
----
+## Recorded results
 
-## 🎯 Project Objective
+| Model | Accuracy reported in the notebook |
+| --- | --- |
+| Logistic regression baseline | 52.12% |
+| Selected Random Forest | 52.65% |
 
-Financial markets are highly volatile and noisy.
-This project aims to:
+The reported improvement is **0.53 percentage points**. These are historical notebook results, not a fresh reproduction.
 
-* Predict short-term crypto price direction
-* Capture momentum and volatility patterns
-* Avoid data leakage using strict chronological validation
-* Compare multiple ML models and select the best performer
+## Evaluation limits
 
----
+The final 365 days form a chronological test period. However, Random Forest candidates are selected using that same test set, so the selected score is not an untouched final evaluation. Labels also cross the train/test boundary by one future step unless the boundary observation is purged.
 
-## 📊 Dataset
+A stronger evaluation would use a separate chronological validation period, purge overlapping labels, and reserve a final test period. Directional accuracy alone does not establish profitable trading after transaction costs.
 
-* 15-minute candlestick data
-* 500,000+ records
-* Multi-asset historical crypto data
-* Features include open, high, low, close, volume
-
----
-
-## 🛠 Methodology
-
-### 1️⃣ Data Preparation
-
-* Cleaned and structured time-series data
-* Created target variable (price direction: up/down)
-* Engineered 10+ lag-based and rolling volatility features
-
-### 2️⃣ Feature Engineering
-
-* Percentage returns
-* Lag features
-* Rolling statistics
-* Volatility indicators
-
-### 3️⃣ Model Development
-
-Compared multiple classification algorithms:
-
-* Logistic Regression
-* K-Nearest Neighbors
-* Decision Tree
-* Random Forest
-
-Applied **strict chronological train-test split** (last 365 days as out-of-sample test set) to eliminate data leakage.
-
----
-
-## 🤖 Model Performance
-
-* Baseline Accuracy: **52.12%**
-* Optimized Random Forest Accuracy: **52.65%**
-* Evaluated using:
-
-  * Accuracy
-  * Confusion Matrix
-  * Feature Importance
-
-The Random Forest model outperformed other classifiers under time-based validation.
-
----
-
-## 📈 Key Insights
-
-* Lag-based features improved predictive stability
-* Volatility indicators helped capture short-term price behavior
-* Time-aware validation is critical in financial ML to prevent leakage
-
----
-
-## 🧰 Tech Stack
-
-* Python
-* Pandas, NumPy
-* Scikit-learn
-* Matplotlib, Seaborn
-
----
-
-## ▶️ How to Run
-
-Clone the repository:
+## Run locally
 
 ```bash
-git clone https://github.com/hitesh175/Crypto-Price-Direction-Prediction-Time-Series-ML-.git
-cd Crypto-Price-Direction-Prediction-Time-Series-ML-
+python -m venv .venv
+python -m pip install jupyter pandas numpy matplotlib scikit-learn
+jupyter notebook
 ```
 
-Install dependencies:
+Activate the environment first, then open `ML_Final_Project_Hitesh.ipynb`. Replace the five absolute Windows paths in its loading cell with the matching repository CSV paths. Run cells in order; the full multi-asset feature matrix and model search can require substantial memory and time.
 
-```bash
-pip install -r requirements.txt
-```
+## Repository contents
 
-Run the notebook or script to train and evaluate the models.
-
----
-
-## 🚀 Author
-
-**Hitesh K R**
-GitHub: [https://github.com/hitesh175](https://github.com/hitesh175)
-
----
-
+The five `BYBIT_*USDT_15m.csv` files supply the data. PNG files capture exploratory plots, model comparisons, the confusion matrix, and feature importance. A consolidated dependency file is not currently included.
